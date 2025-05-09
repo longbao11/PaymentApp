@@ -1,0 +1,123 @@
+<form
+  #form="ngForm"
+  (submit)="onSubmit(form)"
+  [class.submitted]="service.formSubmitted"
+  novalidate
+>
+  <input
+    type="hidden"
+    name="paymentDetailId"
+    [value]="service.formData.paymentDetailId"
+  />
+  <div class="mb-3">
+    <label>Card Owner Name</label>
+    <input
+      class="form control form-control lg"
+      placeholder="Name On Card"
+      #cardOwnerName="ngModel"
+      name="cardOwnerName"
+      [(ngModel)]="service.formData.cardOwnerName"
+      required
+    />
+    <div
+      *ngIf="cardOwnerName.invalid && cardOwnerName.touched"
+      class="text-danger"
+    >
+      Card owner name is required.
+    </div>
+  </div>
+  <div class="mb-3">
+    <label>Card Number</label>
+    <input
+      class="form control form-control lg"
+      placeholder="16 Digit Card Number"
+      #cardNumber="ngModel"
+      name="cardNumber"
+      [(ngModel)]="service.formData.cardNumber"
+      required
+      minlength="16"
+      maxlength="16"
+      pattern="^[0-9]*$"
+    />
+    <div *ngIf="cardNumber.invalid && cardNumber.touched" class="text-danger">
+      <div *ngIf="cardNumber.errors?.['required']">
+        Card number is required.
+      </div>
+      <div *ngIf="cardNumber.errors?.['pattern']">
+        Card number must contain only numbers.
+      </div>
+      <div
+        *ngIf="cardNumber.errors?.['minlength'] || cardNumber.errors?.['maxlength']"
+      >
+        Card number must be 16 digits long.
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="mb-3 col-6">
+      <label>Expiration Date</label>
+      <input
+        class="form control form-control lg"
+        placeholder="MM/YY"
+        #expirationDate="ngModel"
+        name="expirationDate"
+        [(ngModel)]="service.formData.expirationDate"
+        required
+        minlength="5"
+        maxlength="5"
+        pattern="^(0[1-9]|1[0-2])\/\d{2}$"
+      />
+      <div
+        *ngIf="expirationDate.invalid && expirationDate.touched"
+        class="text-danger"
+      >
+        <div *ngIf="expirationDate.errors?.['required']">
+          Expiration date is required.
+        </div>
+        <div *ngIf="expirationDate.errors?.['pattern']">
+          Expiration date must be in MM/YY format, with MM between 01 and 12.
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-3 col-6">
+      <label>Security Code</label>
+      <input
+        class="form control form-control lg"
+        placeholder="CVV"
+        type="password"
+        #securityCode="ngModel"
+        name="securityCode"
+        [(ngModel)]="service.formData.securityCode"
+        required
+        minlength="3"
+        maxlength="3"
+        pattern="^[0-9]*$"
+      />
+      <div
+        *ngIf="securityCode.invalid && securityCode.touched"
+        class="text-danger"
+      >
+        <div *ngIf="securityCode?.errors?.['required']">
+          Security code is required.
+        </div>
+        <div *ngIf="securityCode?.errors?.['pattern']">
+          Security code must contain only numbers.
+        </div>
+
+        <div
+          *ngIf="
+            securityCode.errors?.['minlength'] || securityCode.errors?.['maxlength']
+          "
+        >
+          Security code must be 3 digits long.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-grid">
+    <button class="btn btn-lg btn-success" type="submit">Submit</button>
+  </div>
+</form>
